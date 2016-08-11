@@ -13,7 +13,7 @@ def ReadInput(device):
 			scancode = evdev.events.KeyEvent(event).scancode
 
 			if(evdev.events.KeyEvent(event).keystate == 1):
-       				return("KEY_#"+str(scancode))
+					return("KEY_#"+str(scancode))
 				#if(isinstance(keycode, list)):
 				#		return(keycode[0])
 				#else:
@@ -32,8 +32,9 @@ def ReadInput(device):
 							minn = abss[1].min
 			
 			normval = (float(event.value+abs(minn))/float(maxx-minn))*2.0-1.0
-					
-			if(abs(event.value) > 0.5):
+			#print("val: "+str(event.value)+" - min: "+str(minn)+" - max: "+str(maxx)+" - normalized: "+str(normval))
+
+			if(abs(normval) > 0.5):
 				return(evdev.ecodes.ABS[event.code])
 
 def Configure():
@@ -68,6 +69,8 @@ def Configure():
 
 	cfgfile.close()
 
+	print("\nSaved as: "+cfgfile.name+"\n")
+
 def Launch():
 	devices = [evdev.InputDevice(fn) for fn in evdev.list_devices()]
 
@@ -83,7 +86,21 @@ def Launch():
 	subprocess.call(command, shell=True)
 
 def main():
-	Configure()
-	Launch()
+	while True:
+		print("\n")
+		print("***********************")
+		print("* XBOXDRV CONFIG TOOL *")
+		print("***********************")
+		print("1 - Configure a controller")
+		print("2 - Run xboxdrv for a controller")
+		print("Anything else - Quit\n")
+		option = raw_input("Option: ")
+
+		if option == "1":
+			Configure()
+		elif option == "2":
+			Launch()
+		else:
+			break
 
 main()

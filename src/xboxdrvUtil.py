@@ -33,17 +33,22 @@ def PrintConfig(file, _keymap, _absmap):
 	global keymap, absmap
 
 	Config = ConfigParser.ConfigParser()
- 	Config.optionxform = str
+	Config.optionxform = str
 
 	file.write(header)
 
-	#Config.add_section("evdev-absmap")
+	file.write("[evdev-absmap]\n")
 
-	#for i in range (len(absmap)):
-	#	Config.set("evdev-absmap", _absmap[i], absmap[i])
+	for i in range (len(absmap)):
+		file.write(_absmap[i]+" = "+absmap[i]+"\n")
 
-	Config.add_section("evdev-keymap")
+	file.write("\n")
+
+	file.write("[evdev-keymap]\n")
+
 	for i in range (len(keymap)):
-		Config.set("evdev-keymap", _keymap[i], keymap[i])
+		file.write(_keymap[i]+" = "+keymap[i]+"\n")
+
+	file.write("\n")
 
 	Config.write(file)
